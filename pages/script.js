@@ -1,27 +1,58 @@
+// document.getElementById('searchButton').addEventListener('click', function () {
+//     const searchValue = document.getElementById('searchInput').value.trim();
+//     if (searchValue !== '') {
+//         if (searchValue.split(' ').length === 1) {
+//             // Exibir o toast
+//             const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+//             toast.show();
+//         }
+//         searchInCSV(searchValue);
+//     } else {
+//         alert('Por favor, digite o nome do paciente no campo de busca');
+//     }
+// });
+
 document.getElementById('searchButton').addEventListener('click', function () {
     const searchValue = document.getElementById('searchInput').value.trim();
     if (searchValue !== '') {
         if (searchValue.split(' ').length === 1) {
             // Exibir o toast
-            const toast = new bootstrap.Toast(document.getElementById('liveToast'));
-            toast.show();
-        }
-        searchInCSV(searchValue);
+             const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+             toast.show();
+        } 
+            showLoading(); // Exibir Spinner indicando busca em andamento
+            searchInCSV(searchValue, function (results) {
+                hideLoading(); // Esconder Spinner após a busca
+                displaySearchResults(results, searchValue);
+            });
     } else {
-        alert('Por favor, digite o nome do paciente no campo de busca');
+        alert('Por favor, digite um valor no campo de busca');
     }
 });
 
-function searchInCSV(value) {
-    const filePath = 'db/arquivo_saida.csv'; // Caminho do arquivo CSV
+function showLoading() {
+    const loadingElement = document.getElementById('loading');
+    loadingElement.classList.remove('d-none'); // Remover classe 'd-none' para exibir o Spinner
+}
+
+function hideLoading() {
+    const loadingElement = document.getElementById('loading');
+    loadingElement.classList.add('d-none'); // Adicionar classe 'd-none' para ocultar o Spinner
+}
+
+function searchInCSV(value, callback) {
+    const filePath = 'db/arquivo_saida.csv'; // Substitua pelo caminho correto do arquivo CSV
     Papa.parse(filePath, {
         download: true,
-        delimiter: ',', // Indica que o arquivo CSV é separado por vírgulas
+        delimiter: ',',
         header: true,
         skipEmptyLines: true,
         complete: function (results) {
             displaySearchResults(results.data, value);
             displayNumberOfResults(getNumberOfResults(results.data, value), value);
+            const data = results.data;
+            const matchingRows = data.filter(row => row['content'] && row['content'].toLowerCase().includes(value.toLowerCase()));
+            callback(matchingRows);
         },
         error: function (error) {
             console.error(error);
@@ -127,6 +158,15 @@ function displayNumberOfResults(numResults, value) {
     } else {
         resultStats.textContent = ''; // Não exibe nenhum texto quando não há resultados
     }
+
+    // const resultRedPill = document.getElementById('return');
+    // if (numResults === 1) {
+    //     resultRedPill.textContent = `1`;
+    // } else if (numResults > 1) {
+    //     resultRedPill.textContent = `${numResults}`;
+    // } else {
+    //     resultRedPill.textContent = ''; // Não exibe nenhum texto quando não há resultados
+    // }
 }
 
 function displayErrorPage() {
