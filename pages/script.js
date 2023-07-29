@@ -82,7 +82,7 @@ function displaySearchResults(data, value, currentPage = 1) {
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
                 <td>${index + 1 + startIndex}</td>
-                <td>${row['filePath']}</td>
+                <td>${row['content']}</td>
                 <td><a href="${row['link']}" target="_blank"><i class="fa fa-external-link"></i></a></td>
             `; /*<td><a href="${row['filePath']}" target="_blank"><button type="button" class="btn btn-secondary">Abrir <i class="fa fa-external-link" style="font-size:48px;color:red"></i></button></a></td>*/
             resultTableBody.appendChild(newRow);
