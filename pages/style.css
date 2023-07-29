@@ -1,4 +1,6 @@
 body {
+    color: #fff;
+    background-color: #4B4453;
     font-family: Arial, sans-serif;
 }
 
@@ -8,4 +10,8 @@ body {
 
 #resultDiv {
     display: none;
+}
+
+.toast-body {
+    color:#4B4453
 }

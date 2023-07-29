@@ -1,17 +1,3 @@
-// document.getElementById('searchButton').addEventListener('click', function () {
-//     const searchValue = document.getElementById('searchInput').value.trim();
-//     if (searchValue !== '') {
-//         if (searchValue.split(' ').length === 1) {
-//             // Exibir o toast
-//             const toast = new bootstrap.Toast(document.getElementById('liveToast'));
-//             toast.show();
-//         }
-//         searchInCSV(searchValue);
-//     } else {
-//         alert('Por favor, digite o nome do paciente no campo de busca');
-//     }
-// });
-
 document.getElementById('searchButton').addEventListener('click', function () {
     const searchValue = document.getElementById('searchInput').value.trim();
     if (searchValue !== '') {
@@ -21,14 +7,31 @@ document.getElementById('searchButton').addEventListener('click', function () {
              toast.show();
         } 
             showLoading(); // Exibir Spinner indicando busca em andamento
+            resetPage(); // Limpar resultados anteriores da tabela
             searchInCSV(searchValue, function (results) {
                 hideLoading(); // Esconder Spinner após a busca
                 displaySearchResults(results, searchValue);
             });
     } else {
-        alert('Por favor, digite um valor no campo de busca');
+        alert('Por favor, digite o nome do paciente no campo de busca');
     }
 });
+
+function resetPage() {
+    document.getElementById('resultDiv').style.display = 'none';
+    resetTable();
+    resetPagination();
+}
+
+function resetTable() {
+    const resultTableBody = document.getElementById('resultTableBody');
+    resultTableBody.innerHTML = '';
+}
+
+function resetPagination() {
+    const paginationElement = document.getElementById('pagination');
+    paginationElement.innerHTML = '';
+}
 
 function showLoading() {
     const loadingElement = document.getElementById('loading');
@@ -73,7 +76,7 @@ function displaySearchResults(data, value, currentPage = 1) {
     const currentRows = matchingRows.slice(startIndex, endIndex);
 
     if (currentRows.length === 0) {
-        resultTableBody.innerHTML = '<tr><td colspan="3">Nenhum resultado encontrado.</td></tr>';
+        resultTableBody.innerHTML = `<tr><td colspan="3">Desculpe, mas não foi possível encontrar um resultado por "${value}". Tenta novamente.</td></tr>`;
     } else {
         currentRows.forEach((row, index) => {
             const newRow = document.createElement('tr');
