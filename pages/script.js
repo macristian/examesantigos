@@ -77,8 +77,8 @@ function displaySearchResults(data, value, currentPage = 1) {
 
         const paginationLinks = [];
         const ellipsisLink = createPaginationLink(-1, '...');
-        const prevLink = createPaginationLink(currentPage - 1, 'Anterior', currentPage === 2);
-        const currLink = createPaginationLink(currentPage + 1, '1', currentPage === 1);
+        const prevLink = createPaginationLink(currentPage - 1, 'Anterior', currentPage === 1);
+        //const currLink = createPaginationLink(currentPage + 1, '1', currentPage === 1);
         const nextLink = createPaginationLink(currentPage + 1, 'Próximo', currentPage === totalPages);
 
         if (totalPages <= 7) {
@@ -103,7 +103,7 @@ function displaySearchResults(data, value, currentPage = 1) {
         }
 
         paginationElement.appendChild(prevLink);
-        paginationElement.appendChild(currLink);
+        //paginationElement.appendChild(currLink);
         paginationLinks.forEach(link => paginationElement.appendChild(link));
         paginationElement.appendChild(nextLink);
     } else {
