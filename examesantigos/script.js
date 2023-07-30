@@ -76,7 +76,7 @@ function displaySearchResults(data, value, currentPage = 1) {
     const currentRows = matchingRows.slice(startIndex, endIndex);
 
     if (currentRows.length === 0) {
-        resultTableBody.innerHTML = `<tr><td colspan="3">Desculpe, mas não foi possível encontrar um resultado por "${value}". Tenta novamente.</td></tr>`;
+        resultTableBody.innerHTML = `<tr><td colspan="4">Desculpe, mas não foi possível encontrar um resultado por "${value}". Tenta novamente.</td></tr>`;
     } else {
         currentRows.forEach((row, index) => {
             const newRow = document.createElement('tr');
@@ -175,5 +175,34 @@ function displayNumberOfResults(numResults, value) {
 
 function displayErrorPage() {
     // Redirecionar para a página de erro
-    window.location.href = 'localhost';
+    window.location.href = '../index.html';
 }
+
+// Função para atualizar o contador regressivo a cada segundo
+function updateCountdown() {
+    const countdownElement = document.getElementById('countdown');
+    const targetTime = new Date().getTime() + 1 * 60 * 1000; // 15 minutos em milissegundos
+
+    function update() {
+        const currentTime = new Date().getTime();
+        const remainingTime = targetTime - currentTime;
+
+        if (remainingTime <= 0) {
+            // Redirecionar após 15 minutos
+            alert('Tempo esgotado!');
+            window.location.href = '../index.html';
+        } else {
+            const minutes = Math.floor(remainingTime / 60000);
+            const seconds = Math.floor((remainingTime % 60000) / 1000);
+
+            countdownElement.textContent = `Tempo restante: ${String(minutes).padStart(2, '0')}:${String(
+                seconds
+            ).padStart(2, '0')}`;
+        }
+    }
+
+    update(); // Chamar a função para atualizar imediatamente
+    setInterval(update, 1000); // Atualizar a cada segundo
+}
+
+updateCountdown(); // Chamar a função para iniciar o contador regressivo

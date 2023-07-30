@@ -1,11 +1,10 @@
-
 document.getElementById("loginForm").addEventListener("submit", function (event) {
     event.preventDefault();
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
 
     // Leitura do arquivo CSV
-    Papa.parse("/pages/db/auth.csv", {
+    Papa.parse("/examesantigos/db/auth.csv", {
         download: true,
         complete: function (results) {
             var data = results.data;
@@ -22,7 +21,7 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
             }
 
             if (authenticated) {
-                window.location.href = "/pages/examesantigos.html";
+                window.location.href = "/examesantigos";
             } else {
                 document.getElementById("errorMessage").innerText = "Usuário ou senha inválidos. Entre em contato com o administrador.";
             }
