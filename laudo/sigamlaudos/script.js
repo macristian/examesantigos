@@ -59,7 +59,7 @@ function searchInCSV(value, callback) {
         },
         error: function (error) {
             console.error(error);
-            displayErrorPage();
+            exibirPaginaErro();
         }
     });
 }

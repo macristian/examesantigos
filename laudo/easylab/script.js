@@ -43,8 +43,16 @@ function hideLoading() {
     loadingElement.classList.add('d-none'); // Adicionar classe 'd-none' para ocultar o Spinner
 }
 
+function formatarData(data) {
+    const partes = data.split('-');
+    if (partes.length === 3) {
+        return `${partes[2]}-${partes[1]}-${partes[0]}`;
+    }
+    return data;
+}
+
 function searchInCSV(value, callback) {
-    const filePath = 'db/arquivo_ipic_saida_final.csv'; // Substitua pelo caminho correto do arquivo CSV
+    const filePath = 'db/prontuario.csv'; // Substitua pelo caminho correto do arquivo CSV
     Papa.parse(filePath, {
         download: true,
         delimiter: ',',
@@ -54,21 +62,21 @@ function searchInCSV(value, callback) {
             displaySearchResults(results.data, value);
             displayNumberOfResults(getNumberOfResults(results.data, value), value);
             const data = results.data;
-            const matchingRows = data.filter(row => row['content'] && row['content'].toLowerCase().includes(value.toLowerCase()));
+            const matchingRows = data.filter(row => row['nome'] && row['nome'].toLowerCase().includes(value.toLowerCase()));
             callback(matchingRows);
         },
         error: function (error) {
             console.error(error);
-            displayErrorPage();
+            exibirPaginaErro();
         }
     });
-}
+}   
 
 function displaySearchResults(data, value, currentPage = 1) {
     const resultTableBody = document.getElementById('resultTableBody');
     resultTableBody.innerHTML = '';
 
-    const matchingRows = data.filter(row => row['content'] && row['content'].toLowerCase().includes(value.toLowerCase()));
+    const matchingRows = data.filter(row => row['nome'] && row['nome'].toLowerCase().includes(value.toLowerCase()));
 
     const itemsPerPage = 10;
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -82,9 +90,10 @@ function displaySearchResults(data, value, currentPage = 1) {
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
                 <td>${index + 1 + startIndex}</td>
-                <td>${row['content']}</td>
-                <td><a href="${row['filePath']}" target="_blank"><i class="fa fa-file-pdf-o" style="font-size:24px; color:red"></i></a></td>
-                <td><a href="whatsapp://send?text=Paciente%20${row['content']}.%20Clique%20para%20acessar%20o%20laudo:%20${row['filePath']}" data-action="share/whatsapp/share" target="_blank"><i class="fa fa-send" style="font-size:24px; color:blue"></i></a></td>
+                <td>${row['nome']}</td>
+                <td>${formatarData(row['data_nasc'])}</td>
+                <td>${row['id']}</td>
+                <td><a href="whatsapp://send?text=Paciente%20${row['nome']}%20Data%20de%20Nascimento:%20${formatarData(row['data_nasc'])}%20Código:%20${row['id']}" data-action="share/whatsapp/share" target="_blank"><i class="fa fa-send" style="font-size:24px; color:blue"></i></a></td>
             `; /*<td><a href="${row['filePath']}" target="_blank"><button type="button" class="btn btn-secondary">Abrir <i class="fa fa-external-link" style="font-size:48px;color:red"></i></button></a></td>*/
             resultTableBody.appendChild(newRow);
         });
@@ -149,7 +158,7 @@ function displaySearchResults(data, value, currentPage = 1) {
 }
 
 function getNumberOfResults(data, value) {
-    const matchingRows = data.filter(row => row['content'] && row['content'].toLowerCase().includes(value.toLowerCase()));
+    const matchingRows = data.filter(row => row['nome'] && row['nome'].toLowerCase().includes(value.toLowerCase()));
     return matchingRows.length;
 }
 
