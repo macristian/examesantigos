@@ -26,7 +26,7 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
             }
 
             if (authenticated) {
-                window.location.href = "/laudo/login";
+                window.location.href = "/laudo/database";
             } else {
                 document.getElementById("errorMessage").innerText = "Usuário ou senha inválidos. Entre em contato com o administrador.";
             }

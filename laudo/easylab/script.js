@@ -43,14 +43,6 @@ function hideLoading() {
     loadingElement.classList.add('d-none'); // Adicionar classe 'd-none' para ocultar o Spinner
 }
 
-function formatarData(data) {
-    const partes = data.split('-');
-    if (partes.length === 3) {
-        return `${partes[2]}-${partes[1]}-${partes[0]}`;
-    }
-    return data;
-}
-
 function searchInCSV(value, callback) {
     const filePath = 'db/prontuario.csv'; // Substitua pelo caminho correto do arquivo CSV
     Papa.parse(filePath, {
@@ -70,7 +62,15 @@ function searchInCSV(value, callback) {
             exibirPaginaErro();
         }
     });
-}   
+}
+
+function formatarData(data) {
+    const partes = data.split('-');
+    if (partes.length === 3) {
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    }
+    return data;
+}
 
 function displaySearchResults(data, value, currentPage = 1) {
     const resultTableBody = document.getElementById('resultTableBody');
